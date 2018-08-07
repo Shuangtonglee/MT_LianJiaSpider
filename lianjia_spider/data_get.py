@@ -52,9 +52,12 @@ class myThread(threading.Thread):
 
                         #判断得到的网页是否符合要求
                         bsObj = BeautifulSoup(Url_page.text,'html.parser')
-                        Infos = bsObj.findAll('div',{'class':'info'})[0] #如果获得的网页中没有这个元素，报错再重新访问该url()
-                        htmls.append(Url_page)                             #接上：可能是代理原因，有时获取的页面并不正确，所以添加此判断（对小区页面和成交页面都适用）
-                        Url = ''                                           # Url=''时循环终止，当Info出错时，Url一直未真，循环继续，直到得到Info时，代码继续执行，Url=''，循环终止
+                        #如果获得的网页中没有这个元素，报错再重新访问该url()
+                        #可能是代理原因，有时获取的页面并不正确，所以添加此判断（对小区页面和成交页面都适用）
+                        Infos = bsObj.findAll('div',{'class':'info'})[0]
+                        htmls.append(Url_page)
+                        # Url=''时循环终止，当Info出错时，Url一直为真，循环继续，直到得到Info时，代码继续执行，Url=''，循环终止
+                        Url = ''
                     except Exception as e:
                         print(e)
             except:
@@ -127,7 +130,7 @@ class Chengjiao:
                 deal_number = html.find('div',{'class':'total'}).find('span').get_text()
                 if eval(deal_number) == 0:
 
-                    #偶尔会出现成交房源不为0，却显示为0的情况，可能和代理质量有关。检查两次，减少这种情况的放生
+                    #偶尔会出现成交房源不为0，却显示为0的情况，可能和代理质量有关。检查两次，减少这种情况的发生
                     bsObj = session.get(url,headers=hds[random.randint(0,len(hds)-1)],proxies=proxies,timeout=10)
                     html = BeautifulSoup(bsObj.text,'html.parser')
                     deal_number = html.find('div',{'class':'total'}).find('span').get_text()
@@ -142,8 +145,8 @@ class Chengjiao:
 
     def url(self,xiaoqu_name):
         urls = []
-        chengjiao_url = 'http://sh.lianjia.com/chengjiao/'+'rs'+ parse.unquote(xiaoqu_name)+'/'#没有最后的“/”,有时会出现有成交房源但却显示0套的现象
-        total_pages =self.chengjiao_total_pages(chengjiao_url)                                      #url最后加上“/”比较好
+        chengjiao_url = 'http://sh.lianjia.com/chengjiao/'+'rs'+ parse.unquote(xiaoqu_name)+'/'#url最后加上“/”比较好
+        total_pages =self.chengjiao_total_pages(chengjiao_url)
         #total_pages = 1
         print(total_pages)
         if total_pages == 0:
