@@ -57,8 +57,8 @@ class ExcelWrite:
         wb = Workbook()
         ws = []
 
-        wb0 = load_workbook(filename='上海链家小区数据.xlsx')   #载入excel 表格
-        region_names = wb0.get_sheet_names()                     #获取各sheet 名称，即各区名称
+        wb0 = load_workbook(filename='上海链家小区数据.xlsx')       #载入excel 表格
+        region_names = wb0.get_sheet_names()                       #获取各sheet 名称，即各区名称
         for region_name in region_names[1:]:
             print(region_name)
             ws.append(wb.create_sheet(region_name))
