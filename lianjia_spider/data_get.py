@@ -52,7 +52,7 @@ class myThread(threading.Thread):
 
                         #判断得到的网页是否符合要求
                         bsObj = BeautifulSoup(Url_page.text,'html.parser')
-                        #如果获得的网页中没有这个元素，报错再重新访问该url()
+                        #如果获得的网页中没有这个元素，报错再重新访问该url
                         #可能是代理原因，有时获取的页面并不正确，所以添加此判断（对小区页面和成交页面都适用）
                         Infos = bsObj.findAll('div',{'class':'info'})[0]
                         htmls.append(Url_page)
